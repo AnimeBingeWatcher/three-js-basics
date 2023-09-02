@@ -1,72 +1,44 @@
-// Import CSS and Three.js library
 import './style.css'
+
 import * as THREE from 'three';
 
-// Create a new 3D scene
 const scene = new THREE.Scene();
-
-// Create a perspective camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-// Initialize a WebGL renderer and attach it to the 'bg' canvas element
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#bg'),
 });
 
-// Set the renderer's pixel ratio and size to match the window
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-
-// Set the camera's initial position
 camera.position.setZ(30);
 
-// Render the initial scene
 renderer.render(scene, camera);
+// what is this? I don't know it is the geometry of the sphere. Maybe
+const geometry = new THREE.SphereGeometry( 10, 32, 32 );
+const material = new THREE.MeshStandardMaterial( { color: 0xff6347 } );
+const torus = new THREE.Mesh( geometry, material );
 
-// Create a sphere (or torus) geometry
-const geometry = new THREE.SphereGeometry(10, 32, 32);
+scene.add( torus );
 
-// Create a material for the sphere
-const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
-
-// Create a mesh (the 3D object) with the geometry and material
-const torus = new THREE.Mesh(geometry, material);
-
-// Add the torus to the scene
-scene.add(torus);
-
-// Create a point light and position it
 const pointLight = new THREE.PointLight(0xffffff, 100, 1000);
-pointLight.position.set(5, 5, 20);
+pointLight.position.set(5,5,20)
 
-// Create an ambient light
-const ambientLight = new THREE.AmbientLight(0xffffff);
+const ambientLight = new THREE.AmbientLight( 0xffffff );
+scene.add( pointLight, ambientLight   );
 
-// Add lights to the scene
-scene.add(pointLight, ambientLight);
+const lightHelper = new THREE.PointLightHelper(pointLight)
+const gridHelper = new THREE.GridHelper( 100, 10 );
+scene.add( lightHelper )
 
-// Create a light helper for visualization
-const lightHelper = new THREE.PointLightHelper(pointLight);
 
-// Create a grid helper for visualization
-const gridHelper = new THREE.GridHelper(100, 10);
 
-// Add the light helper to the scene
-scene.add(lightHelper);
-
-// Animation function
 function animate() {
-    // Request the next animation frame
-    requestAnimationFrame(animate);
-
-    // Rotate the torus for animation
+    requestAnimationFrame( animate );
     torus.rotation.x += 0.01;
     torus.rotation.y += 0.005;
     torus.rotation.z += 0.01;
-
-    // Render the scene with the updated camera and objects
     renderer.render(scene, camera);
 }
 
-// Start the animation loop
 animate();
