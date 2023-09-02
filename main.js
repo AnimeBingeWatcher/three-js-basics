@@ -37,6 +37,8 @@ const lightHelper = new THREE.PointLightHelper( pointLight, 1 );
 const gridhelper = new THREE.GridHelper(200, 50);
 scene.add( lightHelper, gridhelper );
 
+const controls = new OrbitControls( camera, renderer.domElement );
+
 //Animation
 
 function animate() {
@@ -44,6 +46,9 @@ function animate() {
     torus.rotation.x += 0.01;
     torus.rotation.y += 0.005;
     torus.rotation.z += 0.01;
+
+    controls.update();
+
     renderer.render(scene, camera);
 }
 
